@@ -2,12 +2,12 @@
 //Paul Edwards 2013
 var aLife = [];
 aLife.circles = [];
-var maxAnimationDuration = 1000;
-var minAnimationDuration = 500;
-var maxDiameter = 80;
-var minDiameter = 1;
-var randomLength = true;
-var spacing = 130;
+aLife.maxAnimationDuration = 1000;
+aLife.minAnimationDuration = 500;
+aLife.maxDiameter = 80;
+aLife.minDiameter = 1;
+aLife.randomLength = true;
+aLife.spacing = 130;
 
 $(document).ready(function() {
 	$("#raphaelHolder").css("width", $(document).width());
@@ -17,29 +17,29 @@ $(document).ready(function() {
 	// Creates canvas 320 × 200 at 10, 50
 	var paper = Raphael(document.getElementById("raphaelHolder"), $(document).width() + 400, $(document).height());
 
-	function getRandomDuration() {
-		return (Math.floor(Math.random() * (maxAnimationDuration - minAnimationDuration) + minAnimationDuration));
+	aLife.getRandomDuration = function() {
+		return (Math.floor(Math.random() * (aLife.maxAnimationDuration - aLife.minAnimationDuration) + aLife.minAnimationDuration));
 	}
 
-	function getRandomDiameter() {
-		return (Math.floor(Math.random() * (maxDiameter - minDiameter) + minDiameter));
+	aLife.getRandomDiameter = function() {
+		return (Math.floor(Math.random() * (aLife.maxDiameter - aLife.minDiameter) + aLife.minDiameter));
 	}
 
-	function getRandomWidth() {
-		return (Math.floor(Math.random() * ((maxDiameter / 3) - (minDiameter / 3)) + (minDiameter / 3)));
+	aLife.getRandomWidth = function() {
+		return (Math.floor(Math.random() * ((aLife.maxDiameter / 3) - (aLife.minDiameter / 3)) + (aLife.minDiameter / 3)));
 	}
 
-	function getRandomColor() {
-		return (rgbToHex(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)));
+	aLife.getRandomColor = function() {
+		return (aLife.rgbToHex(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)));
 	}
 
 	//util
-	function componentToHex(c) {
+	aLife.componentToHex = function(c) {
 		var hex = c.toString(16);
 		return hex.length == 1 ? "0" + hex : hex;
 	}
 
-	function countCircles() {
+	aLife.countCircles = function() {
 		var returnVal = 0;
 		for (circle in aLife.circles) {
 			returnVal += 1
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		return (returnVal);
 	}
 
-	function anythingAtLocation(locationX, locationY) {
+	aLife.anythingAtLocation = function(locationX, locationY) {
 		var returnVal = false;
 		for (circle in aLife.circles) {
 			if (aLife.circles[circle].attr('cx') == locationX && aLife.circles[circle].attr('cy') == locationY) {
@@ -58,11 +58,11 @@ $(document).ready(function() {
 	}
 
 	//util
-	function rgbToHex(r, g, b) {
-		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	aLife.rgbToHex = function(r, g, b) {
+		return "#" + aLife.componentToHex(r) + aLife.componentToHex(g) + aLife.componentToHex(b);
 	}
 
-	function checkSpawn(circleUUID) {
+	aLife.checkSpawn = function(circleUUID) {
 		//console.log('check spawn');
 		//console.log('neighbours: ' + aLife.circles[circleUUID].countNeighbours());
 		if (aLife.circles[circleUUID].countNeighbours() < 3) {
@@ -70,28 +70,28 @@ $(document).ready(function() {
 			//    console.log("choice: " + myChoice);
 			switch(myChoice) {
 				case 0:
-					createAnimateCircle(null, aLife.circles[circleUUID].posTop().x, aLife.circles[circleUUID].posTop().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posTop().x, aLife.circles[circleUUID].posTop().y);
 					break;
 				case 1:
-					createAnimateCircle(null, aLife.circles[circleUUID].posTopRight().x, aLife.circles[circleUUID].posTopRight().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posTopRight().x, aLife.circles[circleUUID].posTopRight().y);
 					break;
 				case 2:
-					createAnimateCircle(null, aLife.circles[circleUUID].posRight().x, aLife.circles[circleUUID].posRight().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posRight().x, aLife.circles[circleUUID].posRight().y);
 					break;
 				case 3:
-					createAnimateCircle(null, aLife.circles[circleUUID].posBottomRight().x, aLife.circles[circleUUID].posBottomRight().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posBottomRight().x, aLife.circles[circleUUID].posBottomRight().y);
 					break;
 				case 4:
-					createAnimateCircle(null, aLife.circles[circleUUID].posBottom().x, aLife.circles[circleUUID].posBottom().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posBottom().x, aLife.circles[circleUUID].posBottom().y);
 					break;
 				case 5:
-					createAnimateCircle(null, aLife.circles[circleUUID].posBottomLeft().x, aLife.circles[circleUUID].posBottomLeft().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posBottomLeft().x, aLife.circles[circleUUID].posBottomLeft().y);
 					break;
 				case 6:
-					createAnimateCircle(null, aLife.circles[circleUUID].posLeft().x, aLife.circles[circleUUID].posLeft().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posLeft().x, aLife.circles[circleUUID].posLeft().y);
 					break;
 				case 7:
-					createAnimateCircle(null, aLife.circles[circleUUID].posTopLeft().x, aLife.circles[circleUUID].posTopLeft().y);
+					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posTopLeft().x, aLife.circles[circleUUID].posTopLeft().y);
 					break;
 
 			}
@@ -128,39 +128,39 @@ $(document).ready(function() {
 	}
 
 	var housekeeping = setInterval(function() {
-		if (countCircles() < 3) {
-			createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
+		if (aLife.countCircles() < 3) {
+			aLife.createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
 		}
 	}, 2000);
 
-	function createAnimateCircle(circleUUID, circleX, circleY) {
+	aLife.createAnimateCircle = function(circleUUID, circleX, circleY) {
 		if (circleUUID) {
-			thisAnimationDuration = maxAnimationDuration;
+			thisAnimationDuration = aLife.maxAnimationDuration;
 
-			if (randomLength) {
-				thisAnimationDuration = getRandomDuration();
+			if (aLife.randomLength) {
+				thisAnimationDuration = aLife.getRandomDuration();
 			}
 			try {
 				//circle existed
 				aLife.circles[circleUUID].animate({
-					fill : getRandomColor(),
-					stroke : getRandomColor(),
-					"stroke-width" : getRandomWidth(),
+					fill : aLife.getRandomColor(),
+					stroke : aLife.getRandomColor(),
+					"stroke-width" : aLife.getRandomWidth(),
 					"stroke-opacity" : Math.random(),
 					"fill-opacity" : Math.random() / 2,
-					"r" : getRandomDiameter()
+					"r" : aLife.getRandomDiameter()
 				}, (thisAnimationDuration / 2), "linear", function() {
 					try {
 						aLife.circles[circleUUID].animate({
-							fill : getRandomColor(),
-							stroke : getRandomColor(),
-							"stroke-width" : getRandomWidth(),
+							fill : aLife.getRandomColor(),
+							stroke : aLife.getRandomColor(),
+							"stroke-width" : aLife.getRandomWidth(),
 							"stroke-opacity" : Math.random(),
 							"fill-opacity" : Math.random() / 2,
-							"r" : getRandomDiameter()
+							"r" : aLife.getRandomDiameter()
 						}, (thisAnimationDuration / 2), "linear", function() {
-							checkSpawn(circleUUID);
-							createAnimateCircle(circleUUID);
+							aLife.checkSpawn(circleUUID);
+							aLife.createAnimateCircle(circleUUID);
 						});
 					} catch(err) {
 						//console.log(err.message);
@@ -175,7 +175,7 @@ $(document).ready(function() {
 			var circleUUID = Raphael.createUUID();
 
 			if (circleX && circleY) {
-				if (anythingAtLocation(circleX, circleY) || circleX < 0 || circleY < 0 || circleX > $(document).width() || circleY > $(document).height()) {
+				if (aLife.anythingAtLocation(circleX, circleY) || circleX < 0 || circleY < 0 || circleX > $(document).width() || circleY > $(document).height()) {
 					return;
 				}
 				aLife.circles.push();
@@ -191,56 +191,56 @@ $(document).ready(function() {
 			aLife.circles[circleUUID].posTop = function() {
 				var returnVal = [];
 				returnVal.x = aLife.circles[circleUUID].attr('cx');
-				returnVal.y = aLife.circles[circleUUID].attr('cy') - spacing;
+				returnVal.y = aLife.circles[circleUUID].attr('cy') - aLife.spacing;
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posTopRight = function() {
 				var returnVal = [];
-				returnVal.x = aLife.circles[circleUUID].attr('cx') + spacing;
-				returnVal.y = aLife.circles[circleUUID].attr('cy') - spacing;
+				returnVal.x = aLife.circles[circleUUID].attr('cx') + aLife.spacing;
+				returnVal.y = aLife.circles[circleUUID].attr('cy') - aLife.spacing;
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posRight = function() {
 				var returnVal = [];
-				returnVal.x = aLife.circles[circleUUID].attr('cx') + spacing;
+				returnVal.x = aLife.circles[circleUUID].attr('cx') + aLife.spacing;
 				returnVal.y = aLife.circles[circleUUID].attr('cy');
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posBottomRight = function() {
 				var returnVal = [];
-				returnVal.x = aLife.circles[circleUUID].attr('cx') + spacing;
-				returnVal.y = aLife.circles[circleUUID].attr('cy') + spacing;
+				returnVal.x = aLife.circles[circleUUID].attr('cx') + aLife.spacing;
+				returnVal.y = aLife.circles[circleUUID].attr('cy') + aLife.spacing;
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posBottom = function() {
 				var returnVal = [];
 				returnVal.x = aLife.circles[circleUUID].attr('cx');
-				returnVal.y = aLife.circles[circleUUID].attr('cy') + spacing;
+				returnVal.y = aLife.circles[circleUUID].attr('cy') + aLife.spacing;
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posBottomLeft = function() {
 				var returnVal = [];
-				returnVal.x = aLife.circles[circleUUID].attr('cx') - spacing;
-				returnVal.y = aLife.circles[circleUUID].attr('cy') + spacing;
+				returnVal.x = aLife.circles[circleUUID].attr('cx') - aLife.spacing;
+				returnVal.y = aLife.circles[circleUUID].attr('cy') + aLife.spacing;
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posLeft = function() {
 				var returnVal = [];
-				returnVal.x = aLife.circles[circleUUID].attr('cx') - spacing;
+				returnVal.x = aLife.circles[circleUUID].attr('cx') - aLife.spacing;
 				returnVal.y = aLife.circles[circleUUID].attr('cy');
 				return (returnVal);
 			};
 
 			aLife.circles[circleUUID].posTopLeft = function() {
 				var returnVal = [];
-				returnVal.x = aLife.circles[circleUUID].attr('cx') - spacing;
-				returnVal.y = aLife.circles[circleUUID].attr('cy') - spacing;
+				returnVal.x = aLife.circles[circleUUID].attr('cx') - aLife.spacing;
+				returnVal.y = aLife.circles[circleUUID].attr('cy') - aLife.spacing;
 				return (returnVal);
 			};
 
@@ -254,8 +254,8 @@ $(document).ready(function() {
 						returnVal += 1;
 					}
 				}
-				//returnVal.x = aLife.circles[circleUUID].attr('cx') - spacing;
-				//returnVal.y = aLife.circles[circleUUID].attr('cy') - spacing;
+				//returnVal.x = aLife.circles[circleUUID].attr('cx') - aLife.spacing;
+				//returnVal.y = aLife.circles[circleUUID].attr('cy') - aLife.spacing;
 				return (returnVal);
 			};
 
@@ -274,11 +274,11 @@ $(document).ready(function() {
 				}
 				return (returnVal);
 			}
-			createAnimateCircle(circleUUID);
+			aLife.createAnimateCircle(circleUUID);
 		}
 	}
 
-	createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
+	aLife.createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
 
 	init();
 });
