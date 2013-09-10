@@ -8,13 +8,14 @@ aLife.maxDiameter = 80;
 aLife.minDiameter = 1;
 aLife.randomLength = true;
 aLife.spacing = 130;
+aLife.animatedBackground = true;
+aLife.backgroundCircles = [];
 
 $(document).ready(function() {
 	$("#raphaelHolder").css("width", $(document).width());
 	$("#raphaelHolder").css("height", $(document).height());
-	//$('#raphaelHolder').width = document.width;
-	//$('#raphaelHolder').height = document.height;
-	// Creates canvas 320 × 200 at 10, 50
+
+	// Creates canvas
 	var paper = Raphael(document.getElementById("raphaelHolder"), $(document).width() + 400, $(document).height());
 
 	aLife.getRandomDuration = function() {
@@ -32,7 +33,6 @@ $(document).ready(function() {
 	aLife.getRandomColor = function() {
 		return (aLife.rgbToHex(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)));
 	}
-
 	//util
 	aLife.componentToHex = function(c) {
 		var hex = c.toString(16);
@@ -56,18 +56,17 @@ $(document).ready(function() {
 		}
 		return (returnVal);
 	}
-
 	//util
 	aLife.rgbToHex = function(r, g, b) {
 		return "#" + aLife.componentToHex(r) + aLife.componentToHex(g) + aLife.componentToHex(b);
 	}
 
 	aLife.checkSpawn = function(circleUUID) {
-		//console.log('check spawn');
-		//console.log('neighbours: ' + aLife.circles[circleUUID].countNeighbours());
+		/*
+		 * Checks neighbours and dies if too many or spawns maybe
+		 */
 		if (aLife.circles[circleUUID].countNeighbours() < 3) {
 			var myChoice = Math.floor(Math.random() * 8);
-			//    console.log("choice: " + myChoice);
 			switch(myChoice) {
 				case 0:
 					aLife.createAnimateCircle(null, aLife.circles[circleUUID].posTop().x, aLife.circles[circleUUID].posTop().y);
@@ -96,8 +95,9 @@ $(document).ready(function() {
 
 			}
 		} else {
-			//had too many neighbours...
-			//    console.log('too many neighbours');
+			/*
+			 * had too many neighbours...
+			 */
 			try {
 				aLife.circles[circleUUID].stop();
 				aLife.circles[circleUUID].animate({
@@ -105,17 +105,10 @@ $(document).ready(function() {
 					"stroke-opacity" : 0,
 					"r" : 0
 				}, (thisAnimationDuration / 2), "linear", function() {
-					//aLife.circles[circleUUID].clear();
-					//
-
 					var indexToRemove = aLife.circles[circleUUID].thisIndex();
 					if (indexToRemove > -1) {
-						//console.log('found index to remove ' + indexToRemove);
-						//aLife.circles.splice(indexToRemove, 1);
 						aLife.circles[circleUUID].remove();
 						delete aLife.circles[circleUUID];
-						//          paper.splice(indexToRemove,0);
-
 					}
 
 				});
@@ -126,7 +119,6 @@ $(document).ready(function() {
 
 		}
 	}
-
 	var housekeeping = setInterval(function() {
 		if (aLife.countCircles() < 3) {
 			aLife.createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
@@ -278,7 +270,44 @@ $(document).ready(function() {
 		}
 	}
 
-	aLife.createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
+	aLife.runBackground = function() {
+		if (aLife.animatedBackground) {
+			
+			for (var i = 0; i < 3; i++) {
+				aLife.addBackgroundCircle();
+			}
 
+		} else{
+			$('body').css('backgroundImage', 	'url(bg.jpg)');
+		}
+	}
+
+	aLife.addBackgroundCircle = function() {
+		aLife.backgroundCircles.push();
+		var circleUUID = Raphael.createUUID();
+		aLife.backgroundCircles[circleUUID] = paper.circle($(document).width() / 2, $(document).height() / 2, $(document).width());
+		aLife.backgroundCircles[circleUUID].attr({
+			"fill" : "r" + aLife.getRandomColor() + "-" + aLife.getRandomColor(),
+			"fill-opacity" : 0.01
+		});
+		aLife.animateBackgroundCircle(circleUUID);
+
+	}
+
+	aLife.animateBackgroundCircle = function(circleUUID) {
+		aLife.backgroundCircles[circleUUID].animate({
+			transform : ['t', (Math.random() * $(document).width() / 2) - $(document).width() / 4, (Math.random() * $(document).height() / 2) - $(document).height() / 4],
+		}, (Math.random() * 1000)+3000, "easeInOut", function() {
+			aLife.animateBackgroundCircle(circleUUID);
+		});
+
+	}
+	/*
+	 * Kick Stuff off...
+	 */
+	aLife.createAnimateCircle(null, ($(document).width() / 2), ($(document).height() / 2));
+	aLife.runBackground();
+
+	//this runs the standard logon script - shouldn't really be here...
 	init();
 });
